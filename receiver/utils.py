@@ -153,4 +153,8 @@ def create_data(
     data.save()
     station.last_activity = time
     station.save()
+    
+    print("data: " + data)
+    print("station: " + station)
+    
     return data
