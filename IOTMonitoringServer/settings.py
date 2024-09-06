@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-bu+)8ft@9+qd*#e#f_s@wkyv2tmq+#!a^3j15h3kjk^jzksu0j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "52.90.27.153"]
+ALLOWED_HOSTS = ["localhost", "54.237.123.48"]
 
 
 # Application definition
@@ -96,7 +96,7 @@ DATABASES = {
         "NAME": "iot_data",  # Nombre de la base de datos
         "USER": "dbadmin",  # Nombre de usuario
         "PASSWORD": "uniandesIOT1234*",  # Contraseña
-        "HOST": "3.90.155.69",  # Dirección IP de la base de datos
+        "HOST": "52.87.61.80",  # Dirección IP de la base de datos
         "PORT": "",  # Puerto de la base de datos
     }
 }
