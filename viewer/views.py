@@ -44,7 +44,7 @@ def realtime_data(request):
                 stateName = body["state"]
                 countryName = body["country"]
                 data["result"], measurement = utils.get_last_week_data(
-                    userParam, cityName, stateName, countryName
+                    userParam, 'bogota', 'cundinamarca', 'colombia'
                 )
             else:
                 data["error"] = "Ha ocurrido un error"
