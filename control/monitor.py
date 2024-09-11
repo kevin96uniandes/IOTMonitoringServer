@@ -80,7 +80,7 @@ def analizarLuminosidad():
                 'station__location__state__name',
                 'station__location__country__name');
 
-        
+    alerts = 0
     for item in aggregation:
         alert = False
         
@@ -100,10 +100,14 @@ def analizarLuminosidad():
             alert = True
             
         if alert:
-            message = F"ALERT LUMINOSIDAD ${alert_message}"
+            message = f"ALERT LUMINOSIDAD {alert_message}"
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print(datetime.now(), "Sending alert to LUMINOSIDAD")
             client.publish(topic, message)
+            alerts += 1 
+            
+        print(len(aggregation), "dispositivos revisados")
+        print(alerts, "alertas enviadas")
         
 
 def on_connect(client, userdata, flags, rc):
