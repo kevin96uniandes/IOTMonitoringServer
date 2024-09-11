@@ -75,7 +75,7 @@ def analizarLuminosidad():
         .select_related('station__user', 'station__location') \
         .select_related('station__location__city', 'station__location__state',
                         'station__location__country') \
-        .values('check_value', 'station__user__username',
+        .values('promedio_luminosidad', 'station__user__username',
                 'station__location__city__name',
                 'station__location__state__name',
                 'station__location__country__name');
