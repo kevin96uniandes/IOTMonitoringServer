@@ -17,6 +17,8 @@ def analyze_data():
     # Si el promedio se excede de los límites, se envia un mensaje de alerta.
 
     print("Calculando alertas...")
+    
+    analizarLuminosidad()
 
     data = Data.objects.filter(
         base_time__gte=datetime.now() - timedelta(hours=1))
@@ -48,16 +50,61 @@ def analyze_data():
         if item["check_value"] > max_value or item["check_value"] < min_value:
             alert = True
 
-        if alert:
-            message = "ALERT {} {} {}".format(variable, min_value, max_value)
-            topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
-            print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
-            client.publish(topic, message)
-            alerts += 1
+       ## if alert:
+         
+         ##   message = "ALERT {} {} {}".format(variable, min_value, max_value)
+         ##   topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
+         ##   print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
+         ##   client.publish(topic, message)
+         ##   alerts += 1 
 
     print(len(aggregation), "dispositivos revisados")
     print(alerts, "alertas enviadas")
 
+def analizarLuminosidad():
+    
+    alert_message = ''
+    print("Calculando luminosidad...")
+    
+    data = Data.objects.filter(
+        measurement__name='luminosidad',
+        base_time__gte=datetime.now() - timedelta(hours=1))
+    
+    aggregation = data.annotate(promedio_luminosidad=Avg('avg_value')) \
+        .select_related('station', 'measurement') \
+        .select_related('station__user', 'station__location') \
+        .select_related('station__location__city', 'station__location__state',
+                        'station__location__country') \
+        .values('check_value', 'station__user__username',
+                'station__location__city__name',
+                'station__location__state__name',
+                'station__location__country__name');
+
+        
+    for item in aggregation:
+        alert = False
+        
+        country = item['station__location__country__name']
+        state = item['station__location__state__name']
+        city = item['station__location__city__name']
+        user = item['station__user__username']
+
+        if item["promedio_luminosidad"] > 20:
+            
+            alert_message = 'tienes mucha luz, porfavor bajale'
+            alert = True
+
+        if item["promedio_luminosidad"] < 10:
+        
+            alert_message = 'Deberias prender la luz'
+            alert = True
+            
+        if alert:
+            message = F"ALERT LUMINOSIDAD ${alert_message}"
+            topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
+            print(datetime.now(), "Sending alert to LUMINOSIDAD")
+            client.publish(topic, message)
+        
 
 def on_connect(client, userdata, flags, rc):
     '''
