@@ -94,7 +94,7 @@ def analizarLuminosidad():
             alert_message = 'tienes mucha luz, porfavor bajale'
             alert = True
 
-        if item["promedio_luminosidad"] < 10:
+        if item["promedio_luminosidad"] < 15:
         
             alert_message = 'Deberias prender la luz'
             alert = True
